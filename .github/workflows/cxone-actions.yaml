@@ -1,0 +1,38 @@
+name: Checkmarx Scan
+permissions:
+  actions: read
+on:
+  workflow_call:
+    inputs:
+      base_uri:
+        type: string
+        description: The base URL of our Checkmarx One environment.
+        required: true
+      cx_tenant:
+        type: string
+        description: The name of our Checkmarx One Tenant Account.
+        required: true
+      cx_client_id:
+        type: string
+        description: The Checkmarx One Client ID. Recommended to create a Github Secret.
+        required: true
+      cx_client_secret:
+        type: string
+        description: The Checkmarx One Client Secret. Recommended to create a Github Secret.
+        required: true
+      branch:
+        type: string
+        required: true
+jobs:
+  checkmarx-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+      - name: Checkmarx AST CLI Action
+        uses: checkmarx/ast-github-action@main
+        with:
+          base_uri: ${{ inputs.base_uri }}
+          cx_tenant: ${{ inputs.cx_tenant }}
+          cx_client_id: ${{ inputs.cx_client_id }}
+          cx_client_secret: ${{ inputs.cx_client_secret }}
